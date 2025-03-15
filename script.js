@@ -21,7 +21,9 @@
         menu.style.padding = "10px";
         menu.style.borderRadius = "5px";
         menu.style.zIndex = "10000";
+        menu.style.display = "none"; // Initially hidden
         menu.innerHTML = `
+            <h3>Baked Mod Menu</h3>
             <button id="autoClicker">Auto Click</button>
             <button id="autoUpgrade">Auto Upgrade</button>
             <button id="autoGolden">Auto Golden Cookie</button>
@@ -48,7 +50,19 @@
         `;
         document.body.appendChild(menu);
 
-        // Auto Clicker: Clicks the cookie every millisecond
+        // Create the toggle button
+        let toggleButton = document.createElement("button");
+        toggleButton.innerText = "Toggle Mod Menu";
+        toggleButton.style.position = "fixed";
+        toggleButton.style.top = "10px";
+        toggleButton.style.left = "150px";
+        toggleButton.style.zIndex = "10001"; // Ensure it's on top of the menu
+        toggleButton.onclick = function() {
+            menu.style.display = (menu.style.display === "none" || menu.style.display === "") ? "block" : "none";
+        };
+        document.body.appendChild(toggleButton);
+
+        // Auto Clicker
         document.getElementById("autoClicker").onclick = function() {
             setInterval(() => {
                 Game.ClickCookie();
@@ -56,7 +70,7 @@
             console.log("[Baked] Auto Clicker Enabled");
         };
 
-        // Auto Upgrade: Buys upgrades from the store every second
+        // Auto Upgrade
         document.getElementById("autoUpgrade").onclick = function() {
             setInterval(() => {
                 for (let i in Game.UpgradesInStore) {
@@ -66,7 +80,7 @@
             console.log("[Baked] Auto Upgrade Enabled");
         };
 
-        // Auto Golden Cookie Clicker: Clicks golden cookies every half second
+        // Auto Golden Cookie Clicker
         document.getElementById("autoGolden").onclick = function() {
             setInterval(() => {
                 let goldenCookie = document.querySelector(".shimmer");
@@ -75,11 +89,11 @@
             console.log("[Baked] Auto Golden Cookie Clicker Enabled");
         };
 
-        // Auto Buy Buildings: Randomly buys a building if enough cookies are available
+        // Auto Buy Buildings (Cursors, Grandmas, etc.)
         document.getElementById("autoBuyBuildings").onclick = function() {
             setInterval(() => {
                 let buildings = Object.keys(Game.Objects); // Get all building names
-                let randomBuilding = Game.Objects[buildings[Math.floor(Math.random() * buildings.length)]];
+                let randomBuilding = Game.Objects[buildings[Math.floor(Math.random() * buildings.length)]]; 
                 if (randomBuilding && Game.cookies >= randomBuilding.price) {
                     randomBuilding.buy();
                     console.log(`[Baked] Bought ${randomBuilding.name}`);
@@ -88,7 +102,7 @@
             console.log("[Baked] Auto Buy Buildings Enabled");
         };
 
-        // Ruin the Game: Activates a game-breaking cheat
+        // Ruin the Game (Cheat)
         document.getElementById("ruinGame").onclick = function() {
             if (confirm("These cookies will taste bitter! Do you want to continue?")) {
                 Game.RuinTheFun();
@@ -96,13 +110,13 @@
             }
         };
 
-        // Set Custom Cookies: Set a specific number of cookies
+        // Set Custom Cookies
         document.getElementById("setCookies").onclick = function() {
             let customAmount = parseInt(document.getElementById("customCookies").value);
             if (!isNaN(customAmount) && customAmount >= 0) {
-                Game.cookies = customAmount; // Set custom amount of cookies
-                Game.cookiesEarned = customAmount; // Update the cookies earned tracker
-                Game.UpdateCookieDisplay(); // Refresh the display
+                Game.cookies = customAmount; 
+                Game.cookiesEarned = customAmount; 
+                Game.UpdateCookieDisplay();
                 console.log(`[Baked] Set cookies to ${customAmount}`);
             } else {
                 alert("Please enter a valid number.");
@@ -127,33 +141,7 @@
             console.log("[Baked] All upgrades unlocked!");
         };
 
-        // Custom Achievement 1: Trigger a custom achievement
-        document.getElementById("customAchievement1").onclick = function() {
-            let achievement = {
-                name: "Cookie Overlord",
-                description: "You've clicked the cookie more times than the gods intended!",
-                unlock: function() {
-                    console.log("[Baked] Unlocked Custom Achievement 1: Cookie Overlord");
-                }
-            };
-            // Simulate unlocking this achievement by calling its unlock method
-            achievement.unlock();
-        };
-
-        // Custom Achievement 2: Trigger another custom achievement
-        document.getElementById("customAchievement2").onclick = function() {
-            let achievement = {
-                name: "Cookie Tycoon",
-                description: "You have accumulated an absurd amount of cookies.",
-                unlock: function() {
-                    console.log("[Baked] Unlocked Custom Achievement 2: Cookie Tycoon");
-                }
-            };
-            // Simulate unlocking this achievement by calling its unlock method
-            achievement.unlock();
-        };
-
-        // Generate Random Cookies: Generate a random amount of cookies
+        // Generate Random Cookies
         document.getElementById("generateRandomCookies").onclick = function() {
             let randomCookies = Math.floor(Math.random() * 10000000000);
             Game.cookies = randomCookies;
@@ -162,7 +150,7 @@
             console.log(`[Baked] Generated Random Cookies: ${randomCookies}`);
         };
 
-        // Max Out All Buildings: Buy the max number of each building
+        // Max Out All Buildings
         document.getElementById("maxBuildings").onclick = function() {
             for (let buildingKey in Game.Objects) {
                 let building = Game.Objects[buildingKey];
@@ -173,14 +161,14 @@
             }
         };
 
-        // Generate Random Upgrades: Unlock random upgrades
+        // Generate Random Upgrades
         document.getElementById("generateRandomUpgrades").onclick = function() {
             let upgradeIndex = Math.floor(Math.random() * Game.Upgrades.length);
             Game.Upgrades[upgradeIndex].unlock();
             console.log(`[Baked] Unlocked Random Upgrade: ${Game.Upgrades[upgradeIndex].name}`);
         };
 
-        // Super Cookie Boost: Boost cookies to a massive amount
+        // Super Cookie Boost
         document.getElementById("superCookieBoost").onclick = function() {
             Game.cookies = 1000000000000000;
             Game.cookiesEarned = 1000000000000000;
@@ -188,20 +176,20 @@
             console.log("[Baked] Super Cookie Boost Activated!");
         };
 
-        // No Cookie Limit: Remove cookie limit
+        // No Cookie Limit
         document.getElementById("noCookieLimit").onclick = function() {
-            Game.cookieLimit = Infinity; // Set no limit
+            Game.cookieLimit = Infinity; 
             console.log("[Baked] Cookie limit removed.");
         };
 
-        // Disable Sugar Lumps: Disable the sugar lumps system
+        // Disable Sugar Lumps
         document.getElementById("disableSugarLumps").onclick = function() {
-            Game.sugarLumps = 0; // Set sugar lumps to 0
+            Game.sugarLumps = 0; 
             Game.UpdateSugarLumpDisplay();
             console.log("[Baked] Sugar lumps system disabled.");
         };
 
-        // Save All Progress: Save the game state
+        // Save All Progress
         document.getElementById("saveAllProgress").onclick = function() {
             Game.WriteSave();
             console.log("[Baked] Progress saved!");
@@ -215,4 +203,3 @@
         };
     }
 })();
-
